@@ -16,6 +16,7 @@ from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
 router = DefaultRouter()
+
 router.register('staffprofile',staffprofileviewset)
 router.register('staffqualification',staffqualviewset)
 router.register('staffexperience',staffexpviewset)

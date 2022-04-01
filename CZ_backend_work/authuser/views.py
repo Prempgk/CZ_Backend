@@ -7,8 +7,8 @@ import requests
 
 
 
-CLIENT_ID = 'PvFLJSRS2aAH6LIMzIDkUBUdbQUOJLvqeMSZkfdX'
-CLIENT_SECRET = 'UUolFscf8Tjhcf4x3MLTPecM4dAUoD0Oi8rXbmHgW6pef3iE7vBwUmancW4BLfUJ6RyxS4iojwxuAw1QJWEBNqrhRXjpeZKwmeoaQnwb8RThshsUbqpnJsNktxARm2HL'
+CLIENT_ID = '7bVC1kbk7boKd6968HzgVftFbJOGkVEe2Zhn7HsT'
+CLIENT_SECRET = 'Dl3Pl9lD9jewRsqmpK0ndkviqAuIbN8iQnPnhuxyJlFVV9yjmJ8zNZLQq7k3XKDkdeydTUhdpVqXVBKRgttJlq4ENUtmRPNyMnZJKRyzLdFGuBy0FaIhOksyu44DplqM'
 
 
 @api_view(['POST'])
