@@ -37,10 +37,8 @@ def staffprofileApi(request,id=0):
 """
 
 from rest_framework import status
-from rest_framework.permissions import DjangoObjectPermissions
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
-from rest_framework import viewsets
 from.models import staff_profile,staff_experience,staff_qualification
 from.serializers import staff_profile_serializer,staff_exp_serializer,staff_qual_serializer
 

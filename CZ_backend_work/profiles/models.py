@@ -1,8 +1,5 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-import base64
-import json
-from django.utils.crypto import get_random_string
 # Create your models here.
 #def new_file_name(instance,filename):
    ## return 'images/{0}{1}'.format(get_random_string(length=10),filename)

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import *
-
+from .models import staff_profile
 class staff_profile_serializer(serializers.ModelSerializer):
     class Meta:
         model = staff_profile
