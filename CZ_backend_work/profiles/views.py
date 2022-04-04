@@ -39,8 +39,36 @@ def staffprofileApi(request,id=0):
 from rest_framework import status
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
-from.models import staff_profile,staff_experience,staff_qualification
-from.serializers import staff_profile_serializer,staff_exp_serializer,staff_qual_serializer
+from django.contrib.auth.models import User
+from .models import staff_profile, staff_experience, staff_qualification
+from .serializers import staff_profile_serializer, staff_exp_serializer, staff_qual_serializer, UserSerializer
+import requests
+
+CLIENT_ID = 'PvFLJSRS2aAH6LIMzIDkUBUdbQUOJLvqeMSZkfdX'
+CLIENT_SECRET = 'UUolFscf8Tjhcf4x3MLTPecM4dAUoD0Oi8rXbmHgW6pef3iE7vBwUmancW4BLfUJ6RyxS4iojwxuAw1QJWEBNqrhRXjpeZKwmeoaQnwb8RThshsUbqpnJsNktxARm2HL'
+
+
+class adminlogin(GenericViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+    def login(self, request):
+        a = request.data['username']
+        b = request.data['password']
+        try:
+            User.objects.get(username=a, password=b)
+            r = requests.post('http://127.0.0.1:8000/o/token/',
+                              data={
+                                  'grant_type': 'password',
+                                  'username': request.data['username'],
+                                  'password': request.data['password'],
+                                  'client_id': CLIENT_ID,
+                                  'client_secret': CLIENT_SECRET,
+                              },
+                              )
+            return Response(r.json())
+        except:
+            return Response(status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
 class staffprofileviewset(GenericViewSet):
@@ -51,37 +79,37 @@ class staffprofileviewset(GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data,status=status.HTTP_201_CREATED)
-
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_queryset(),many=True)
+        serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data)
 
-    def retrieve(self,request,pk=None):
+    def retrieve(self, request, pk=None):
         data = staff_profile.objects.get(pk=pk)
         serializer = self.get_serializer(data)
         return Response(serializer.data)
 
-    def put(self,request,pk=None):
+    def put(self, request, pk=None):
         putdata = request.data
         details = staff_profile.objects.get(pk=pk)
-        serializer = staff_profile_serializer(details,data=putdata)
+        serializer = staff_profile_serializer(details, data=putdata)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self,request,pk=None):
+    def destroy(self, request, pk=None):
         data = staff_profile.objects.get(pk=pk)
         data.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class staffqualviewset(GenericViewSet):
     queryset = staff_qualification.objects.all()
     serializer_class = staff_qual_serializer
 
-    def create(self,request):
+    def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             a = request.data['staff_id']
@@ -93,18 +121,17 @@ class staffqualviewset(GenericViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    def list(self,request):
+    def list(self, request):
         data = staff_qualification.objects.get(staff_id=1)
         serializer = self.get_serializer(data)
         return Response(serializer.data)
-
 
 
 class staffexpviewset(GenericViewSet):
     queryset = staff_experience.objects.all()
     serializer_class = staff_exp_serializer
 
-    def create(self,request):
+    def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             a = request.data['staff_id']
@@ -116,8 +143,7 @@ class staffexpviewset(GenericViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    def list(self,request):
+    def list(self, request):
         data = staff_experience.objects.get(staff_id=1)
         serializer = self.get_serializer(data)
         return Response(serializer.data)
-

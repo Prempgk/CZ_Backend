@@ -7,8 +7,8 @@ import requests
 
 
 
-CLIENT_ID = '7bVC1kbk7boKd6968HzgVftFbJOGkVEe2Zhn7HsT'
-CLIENT_SECRET = 'Dl3Pl9lD9jewRsqmpK0ndkviqAuIbN8iQnPnhuxyJlFVV9yjmJ8zNZLQq7k3XKDkdeydTUhdpVqXVBKRgttJlq4ENUtmRPNyMnZJKRyzLdFGuBy0FaIhOksyu44DplqM'
+CLIENT_ID = 'PvFLJSRS2aAH6LIMzIDkUBUdbQUOJLvqeMSZkfdX'
+CLIENT_SECRET = 'UUolFscf8Tjhcf4x3MLTPecM4dAUoD0Oi8rXbmHgW6pef3iE7vBwUmancW4BLfUJ6RyxS4iojwxuAw1QJWEBNqrhRXjpeZKwmeoaQnwb8RThshsUbqpnJsNktxARm2HL'
 
 
 @api_view(['POST'])
@@ -25,7 +25,7 @@ def register(request):
         # If it is valid, save the data (creates a user).
         serializer.save()
         # Then we get a token for the created user.
-        # This could be done differentley
+        # This could be done differently
         r = requests.post('http://127.0.0.1:8000/o/token/',
             data={
                 'grant_type': 'password',
@@ -95,7 +95,7 @@ def revoke_token(request):
             'client_secret': CLIENT_SECRET,
         },
     )
-    # If it goes well return sucess message (would be empty otherwise)
+    # If it goes well return success message (would be empty otherwise)
     if r.status_code == requests.codes.ok:
         return Response({'message': 'token revoked'}, r.status_code)
     # Return the error if it goes badly

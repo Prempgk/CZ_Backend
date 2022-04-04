@@ -51,11 +51,13 @@ class staff_profile(models.Model):
     Designation = models.CharField(max_length=20)
     Date_of_joining = models.DateField()
     Nature_of_appointment = models.CharField(max_length=20)
+    Role = models.CharField(max_length=20)
+    Responsibilities = models.CharField(max_length=100, null=True, blank=True)
     staff_status = models.CharField(max_length=10)
     Temporary_Address = models.CharField(max_length=250, default=False)
     Permanent_Address = models.CharField(max_length=250, default=False)
     Description = models.CharField(max_length=1000, null=True, blank=True)
-    # Profile_pic = models.ImageField(upload_to=user_directory_path,default='posts/default.jpg')
+    #Profile_pic = models.ImageField()
     def __int__(self):
         return self.staff_id
 
@@ -74,4 +76,3 @@ class staff_experience(models.Model):
     Name_of_institution = models.CharField(max_length=100)
     Experience_from = models.DateField()
     Experience_to = models.DateField()
-
