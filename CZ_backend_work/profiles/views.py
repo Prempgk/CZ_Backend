@@ -64,7 +64,7 @@ class adminlogin(GenericViewSet):
                                   'password': request.data['password'],
                                   'client_id': CLIENT_ID,
                                   'client_secret': CLIENT_SECRET,
-                              },
+                              }
                               )
             return Response(r.json())
         except:
