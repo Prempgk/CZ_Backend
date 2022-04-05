@@ -10,16 +10,17 @@ urlpatterns = [
 
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import staffexpviewset, staffprofileviewset, staffqualviewset, adminlogin
+from .views import staffexpviewset, staffprofileviewset, staffqualviewset,AuthUserLoginView
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
 
 router = DefaultRouter()
 
 router.register('staffprofile', staffprofileviewset)
 router.register('staffqualification', staffqualviewset)
 router.register('staffexperience', staffexpviewset)
-router.register('login', adminlogin)
 urlpatterns = [
-                  path('v1/', include(router.urls)),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('v1/',include(router.urls)),
+    path('login/',AuthUserLoginView.as_view(), name='Login'),
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

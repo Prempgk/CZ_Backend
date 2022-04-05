@@ -100,3 +100,5 @@ def revoke_token(request):
         return Response({'message': 'token revoked'}, r.status_code)
     # Return the error if it goes badly
     return Response(r.json(), r.status_code)
+
+

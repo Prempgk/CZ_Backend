@@ -1,7 +1,11 @@
+from django.contrib.auth import authenticate
+from oauth2_provider.oauth2_validators import RefreshToken
+
 from rest_framework import serializers
 from .models import *
 from .models import staff_profile
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, update_last_login
+
 
 class staff_profile_serializer(serializers.ModelSerializer):
     class Meta:
@@ -29,7 +33,39 @@ class staff_exp_serializer(serializers.ModelSerializer):
         )
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id','username','password')
+class UserLoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=50)
+    password = serializers.CharField(max_length=128, write_only=True)
+    access = serializers.CharField(read_only=True)
+    refresh = serializers.CharField(read_only=True)
+
+    def create(self, validated_date):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
+    def validate(self, data):
+        username = data['username']
+        password = data['password']
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            raise serializers.ValidationError("Invalid login credentials")
+
+        try:
+            refresh = RefreshToken.user
+            refresh_token = str(refresh)
+            access_token = str(refresh)
+
+            update_last_login(None, user)
+
+            validation = {
+                'access': access_token,
+                'refresh': refresh_token,
+                'username': user.username,
+            }
+
+            return validation
+        except User.DoesNotExist:
+            raise serializers.ValidationError("Invalid login credentials")

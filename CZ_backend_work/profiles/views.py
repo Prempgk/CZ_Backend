@@ -35,40 +35,44 @@ def staffprofileApi(request,id=0):
         prof_data.delete()
         return JsonResponse("Deleted Successfully", safe=False)
 """
-
+from django.contrib.auth import authenticate
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
+from oauth2_provider.models import get_access_token_model
+from rest_framework.exceptions import ValidationError
+from rest_framework.utils import json
+from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import staff_profile, staff_experience, staff_qualification
-from .serializers import staff_profile_serializer, staff_exp_serializer, staff_qual_serializer, UserSerializer
+from .serializers import staff_profile_serializer, staff_exp_serializer, staff_qual_serializer, UserLoginSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 import requests
 
-CLIENT_ID = 'PvFLJSRS2aAH6LIMzIDkUBUdbQUOJLvqeMSZkfdX'
-CLIENT_SECRET = 'UUolFscf8Tjhcf4x3MLTPecM4dAUoD0Oi8rXbmHgW6pef3iE7vBwUmancW4BLfUJ6RyxS4iojwxuAw1QJWEBNqrhRXjpeZKwmeoaQnwb8RThshsUbqpnJsNktxARm2HL'
+class AuthUserLoginView(APIView):
+    serializer_class = UserLoginSerializer
+    permission_classes = (AllowAny, )
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        valid = serializer.is_valid(raise_exception=True)
+
+        if valid:
+            status_code = status.HTTP_200_OK
+
+            response = {
+                'success': True,
+                'statusCode': status_code,
+                'message': 'User logged in successfully',
+                'access': serializer.data['access'],
+                'refresh': serializer.data['refresh'],
+            }
+
+            return Response(response, status=status_code)
 
 
-class adminlogin(GenericViewSet):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-
-    def login(self, request):
-        a = request.data['username']
-        b = request.data['password']
-        try:
-            User.objects.get(username=a, password=b)
-            r = requests.post('http://127.0.0.1:8000/o/token/',
-                              data={
-                                  'grant_type': 'password',
-                                  'username': request.data['username'],
-                                  'password': request.data['password'],
-                                  'client_id': CLIENT_ID,
-                                  'client_secret': CLIENT_SECRET,
-                              }
-                              )
-            return Response(r.json())
-        except:
-            return Response(status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
 class staffprofileviewset(GenericViewSet):
@@ -147,3 +151,11 @@ class staffexpviewset(GenericViewSet):
         data = staff_experience.objects.get(staff_id=1)
         serializer = self.get_serializer(data)
         return Response(serializer.data)
+
+"""{
+    "access_token": "qB5Je93iTC9h6VWkFok2RcEeJCDuf9",
+    "expires_in": 36000,
+    "token_type": "Bearer",
+    "scope": "read write",
+    "refresh_token": "8XQBQYecPgBIIDFUYCmpWqoDjQOamN"
+}"""
