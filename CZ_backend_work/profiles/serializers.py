@@ -33,7 +33,24 @@ class staff_exp_serializer(serializers.ModelSerializer):
         )
 
 
-class UserLoginSerializer(serializers.Serializer):
+class student_profile_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = student_profile
+        fields = (
+            'id', 'student_id', 'First_name', 'Middle_name', 'Last_name', 'student_type', 'Standard', 'Section', 'Medium', 'Admission_no',  'Dob', 'Gender', 'Scar', 'Mole', 'Blood_group', 'Religion', 'Nationality', 'Caste', 'Community',
+            'Aadhaar_no', 'Mail_id', 'Mobile_no', 'Parent_mobile_no', 'Parent_Mail_id', 'Mother_name', 'Mother_occupation', 'Mother_education',
+            'Father_name', 'Father_occupation', 'Father_education', 'Guardian_name', 'Guardian_occupation', 'Guardian_education', 'Medical_History', 'Languages_known', 'Mother_tongue', 'Skills', 'Hobbies',
+            'Awards', 'Recognitions', 'Date_of_joining', 'Temporary_Address', 'Permanent_Address', 'Description'
+        )
+
+class Student_sibling_seializer(serializers.ModelSerializer):
+    class Meta:
+        model = student_siblings_detail
+        fields = {
+            'id', 'student_id', 'Sibling_name', 'Sibling_education', 'Education_institute', 'Relationship_type'
+        }
+
+class UserLoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=50)
     password = serializers.CharField(max_length=128, write_only=True)
     access = serializers.CharField(read_only=True)
@@ -56,7 +73,7 @@ class UserLoginSerializer(serializers.Serializer):
         try:
             refresh = RefreshToken.user
             refresh_token = str(refresh)
-            access_token = str(refresh)
+            access_token = str(refresh_token)
 
             update_last_login(None, user)
 
@@ -64,6 +81,7 @@ class UserLoginSerializer(serializers.Serializer):
                 'access': access_token,
                 'refresh': refresh_token,
                 'username': user.username,
+                'password': user.password
             }
 
             return validation

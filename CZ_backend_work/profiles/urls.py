@@ -10,7 +10,7 @@ urlpatterns = [
 
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import staffexpviewset, staffprofileviewset, staffqualviewset,AuthUserLoginView
+from .views import staffexpviewset, staffprofileviewset, staffqualviewset, AuthUserLoginView, studentprofileviewset, studentsiblingviewset
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
@@ -20,6 +20,8 @@ router = DefaultRouter()
 router.register('staffprofile', staffprofileviewset)
 router.register('staffqualification', staffqualviewset)
 router.register('staffexperience', staffexpviewset)
+router.register('studentprofile', studentprofileviewset)
+router.register('studentsiblings', studentsiblingviewset)
 urlpatterns = [
     path('v1/',include(router.urls)),
     path('login/',AuthUserLoginView.as_view(), name='Login'),
